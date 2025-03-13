@@ -13,7 +13,7 @@ local setup_hud = function(player)
 	hud[playername] = hud_data
 
 	hud_data.overlay = player:hud_add({
-	    hud_elem_type = "image",
+	    type = "image",
 	    position = {x = 0.5, y = 0.5},
 	    scale = {
 	      x = -100,
@@ -23,7 +23,7 @@ local setup_hud = function(player)
 	})
 
 	hud_data.o2_bg = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = HUD_POSITION,
 		offset = O2_BAR_OFFSET,
 		text = "molten_sailor_coolant_levels_bg.png",
@@ -32,7 +32,7 @@ local setup_hud = function(player)
 	})
 
 	hud_data.o2_fg = player:hud_add({
-		hud_elem_type = "image",
+		type = "image",
 		position = HUD_POSITION,
 		offset = O2_BAR_OFFSET,
 		text = "molten_sailor_coolant_levels_fg_green.png",
@@ -41,7 +41,7 @@ local setup_hud = function(player)
 	})
 
 	hud_data.o2_label = player:hud_add({
-		hud_elem_type = "text",
+		type = "text",
 		position = HUD_POSITION,
 		offset = {x = O2_BAR_OFFSET.x - 80,   y = O2_BAR_OFFSET.y},
 		text = "Coolant-Level:",
@@ -51,7 +51,7 @@ local setup_hud = function(player)
 	})
 
 	hud_data.o2_level = player:hud_add({
-		hud_elem_type = "text",
+		type = "text",
 		position = {x = 1, y = HUD_POSITION.y },
 		offset = {x = O2_BAR_OFFSET.x - 70,   y = O2_BAR_OFFSET.y},
 		text = "",
@@ -61,7 +61,7 @@ local setup_hud = function(player)
 	})
 
 	hud_data.suit_incomplete = player:hud_add({
-		hud_elem_type = "text",
+		type = "text",
 		position = HUD_POSITION,
 		offset = SUITE_INCOMPLETE_OFFSET,
 		text = "",
@@ -101,19 +101,19 @@ local update_hud = function(player, has_full_suit, armor_list)
 	if has_full_suit then
 		player:hud_change(hud_data.suit_incomplete, "text", "")
 	else
-		player:hud_change(hud_data.suit_incomplete, "text", "Anti-lava Suit incomplete!")
+		player:hud_change(hud_data.suit_incomplete, "text", "Anti-lava suit incomplete!")
 	end
 
 	local max_wear = 0
 	for _,item in pairs(armor_list) do
 		-- wear:0 == full, wear:65535 == empty
-		if item:get_name() == "molten_sailor:helmet" then
+		if item:get_name() == "molten_sailor_mcl:helmet_obsidian" then
 			max_wear = math.max(max_wear, item:get_wear())
-		elseif item:get_name() == "molten_sailor:chestplate" then
+		elseif item:get_name() == "molten_sailor_mcl:chestplate_obsidian" then
 			max_wear = math.max(max_wear, item:get_wear())
-		elseif item:get_name() == "molten_sailor:pants" then
+		elseif item:get_name() == "molten_sailor_mcl:leggings_obsidian" then
 			max_wear = math.max(max_wear, item:get_wear())
-		elseif item:get_name() == "molten_sailor:boots" then
+		elseif item:get_name() == "molten_sailor_mcl:boots_obsidian" then
 			max_wear = math.max(max_wear, item:get_wear())
 		end
 	end
@@ -153,7 +153,7 @@ minetest.register_on_leaveplayer(function(player)
 	hud[playername] = nil
 end)
 
-molten_sailor.set_player_wearing = function(player, has_full_suit, has_helmet, armor_list)
+molten_sailor_mcl.set_player_wearing = function(player, has_full_suit, has_helmet, armor_list)
 	local playername = player:get_player_name()
 	local hud_data = hud[playername]
 

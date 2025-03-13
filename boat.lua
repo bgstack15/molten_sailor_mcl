@@ -60,8 +60,8 @@ function lava_boat.on_rightclick(self, clicker)
 		self.driver = nil
 		self.auto = false
 		clicker:set_detach()
-		player_api.player_attached[name] = false
-		player_api.set_animation(clicker, "stand" , 30)
+		--player_api.player_attached[name] = false
+		--player_api.set_animation(clicker, "stand" , 30)
 		local pos = clicker:get_pos()
 		pos = {x = pos.x, y = pos.y + 0.2, z = pos.z}
 		minetest.after(0.1, function()
@@ -79,9 +79,9 @@ function lava_boat.on_rightclick(self, clicker)
 		self.driver = name
 		clicker:set_attach(self.object, "",
 			{x = 0.5, y = 1, z = -3}, {x = 0, y = 0, z = 0})
-		player_api.player_attached[name] = true
+		--player_api.player_attached[name] = true
 		minetest.after(0.2, function()
-			player_api.set_animation(clicker, "sit" , 30)
+			--player_api.set_animation(clicker, "sit" , 30)
 		end)
 		clicker:set_look_horizontal(self.object:get_yaw())
 	end
@@ -118,15 +118,14 @@ function lava_boat.on_punch(self, puncher)
 	if self.driver and name == self.driver then
 		self.driver = nil
 		puncher:set_detach()
-		player_api.player_attached[name] = false
+		--player_api.player_attached[name] = false
 	end
 	if not self.driver then
 		self.removed = true
 		local inv = puncher:get_inventory()
-		if not (creative and creative.is_enabled_for
-				and creative.is_enabled_for(name))
-				or not inv:contains_item("main", "molten_sailor:;lava_boat") then
-			local leftover = inv:add_item("main", "molten_sailor:lava_boat")
+		if (not minetest.is_creative_enabled(name))
+				or not inv:contains_item("main", "molten_sailor_mcl:lava_boat") then
+			local leftover = inv:add_item("main", "molten_sailor_mcl:lava_boat")
 			-- if no room in inventory add a replacement boat to the world
 			if not leftover:is_empty() then
 				minetest.add_item(self.object:get_pos(), leftover)
@@ -239,10 +238,10 @@ end
 
 
 
-minetest.register_entity("molten_sailor:lava_boat", lava_boat)
+minetest.register_entity("molten_sailor_mcl:lava_boat", lava_boat)
 
 
-minetest.register_craftitem("molten_sailor:lava_boat", {
+minetest.register_craftitem("molten_sailor_mcl:lava_boat", {
 	description = "Lava Boat",
 	inventory_image = "molten_sailor_boats_inventory.png",
 	wield_image = "molten_sailor_boats_wield.png",
@@ -268,14 +267,13 @@ minetest.register_craftitem("molten_sailor:lava_boat", {
 			return itemstack
 		end
 		pointed_thing.under.y = pointed_thing.under.y + 0.5
-		lava_boat = minetest.add_entity(pointed_thing.under, "molten_sailor:lava_boat")
+		lava_boat = minetest.add_entity(pointed_thing.under, "molten_sailor_mcl:lava_boat")
 		if lava_boat then
 			if placer then
 				lava_boat:set_yaw(placer:get_look_horizontal())
 			end
 			local player_name = placer and placer:get_player_name() or ""
-			if not (creative and creative.is_enabled_for and
-					creative.is_enabled_for(player_name)) then
+			if not minetest.is_creative_enabled(placer:get_player_name()) then
 				itemstack:take_item()
 			end
 		end
@@ -283,12 +281,14 @@ minetest.register_craftitem("molten_sailor:lava_boat", {
 	end,
 })
 
-
+local m = molten_sailor_mcl.main
+local c = molten_sailor_mcl.coolant
+local b = molten_sailor_mcl.boat
 minetest.register_craft({
-	output = "molten_sailor:lava_boat",
+	output = "molten_sailor_mcl:lava_boat",
 	recipe = {
-		{"",           "boats:boat",           ""          },
-		{"default:obsidian_glass", "default:ice",           "default:obsidian_glass"},
-		{"default:obsidian_glass", "default:obsidian_glass", "default:obsidian_glass"},
+		{"", b, ""},
+		{m , c , m },
+		{m , m , m },
 	},
 })

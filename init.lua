@@ -1,17 +1,16 @@
-
-molten_sailor = {
-	armor_use = tonumber(minetest.settings:get("molten_sailor.armor_use")) or 75,
+molten_sailor_mcl = {
+	durability_seconds = tonumber(minetest.settings:get("molten_sailor_mcl.durability_seconds")) or 1200,
+   main = "mcl_core:obsidian",
+   coolant = "group:ice",
+   boat = "group:boat",
 }
 
-
-
-local MP = minetest.get_modpath("molten_sailor")
-
+local MP = minetest.get_modpath("molten_sailor_mcl")
 dofile(MP.."/boat.lua")
 dofile(MP.."/suit.lua")
 dofile(MP.."/crafts.lua")
 dofile(MP.."/hud.lua")
 dofile(MP.."/burning.lua")
-dofile(MP.."/repair.lua")
 
-print("[OK] molten_sailor")
+print("[OK] molten_sailor_mcl")
+core.log("action","[molten_sailor_mcl] using durability " .. molten_sailor_mcl.durability_seconds)
