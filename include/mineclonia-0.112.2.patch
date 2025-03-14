@@ -1,6 +1,17 @@
---- mineclonia-0.112.2/mods/ENTITIES/mcl_burning/api.lua	               2025-03-07 10:43:26.377727853 -0500
-+++ mineclonia-support-molten-sailor/mods/ENTITIES/mcl_burning/api.lua	2025-03-13 12:36:15.524022961 -0400
-@@ -103,8 +103,14 @@
+Author: bgstack15
+Purpose: patch mineclonia 0.112.2 to work with mod molten_sailor_mcl
+Application: mineclonia at https://codeberg.org/mineclonia/mineclonia
+Version: 0.112.2
+Last-modified: 2025-03-13
+--- mineclonia/mods/ENTITIES/mcl_burning/api.lua	   2025-03-07 10:43:26.377727853 -0500
++++ mineclonia.new/mods/ENTITIES/mcl_burning/api.lua	2025-03-13 18:27:09.976537113 -0400
+@@ -1,4 +1,5 @@
+ local enable_damage = minetest.settings:get_bool("enable_damage")
++local has_molten_sailor = minetest.get_modpath("molten_sailor_mcl") ~= nil
+ 
+ local collisionbox_cache = {}
+ 
+@@ -103,8 +104,14 @@
  		return
  	end
  
@@ -17,10 +28,10 @@
  	else
  		local max_fire_prot_lvl = 0
  		local inv = mcl_util.get_inventory(obj)
---- mineclonia/mods/CORE/mcl_damage/init.lua.2025-03-13.01	2025-03-07 10:43:26.369727831 -0500
-+++ mineclonia/mods/CORE/mcl_damage/init.lua	2025-03-13 12:37:12.396298574 -0400
+--- mineclonia/mods/CORE/mcl_damage/init.lua    	2025-03-07 10:43:26.369727831 -0500
++++ mineclonia.new/mods/CORE/mcl_damage/init.lua	2025-03-13 18:25:31.980053297 -0400
 @@ -1,3 +1,5 @@
-+has_molten_sailor = minetest.get_modpath("molten_sailor_mcl") ~= nil
++local has_molten_sailor = minetest.get_modpath("molten_sailor_mcl") ~= nil
 +
  mcl_damage = {
  	modifiers = {},
