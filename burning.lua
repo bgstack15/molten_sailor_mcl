@@ -84,11 +84,10 @@ mcl_damage.register_modifier(function(obj, damage, reason)
 		return 0
 	end
 	return -- return nil to continue with previous damage value
-end, 100)
+end, -50)
 
 -- loop over all registered nodes to modify group:set_on_fire to set_on_fire_classic
 minetest.register_on_mods_loaded(function()
-	-- Store blast resistance values by content ids to improve performance.
 	for name, def in pairs(minetest.registered_nodes) do
 		local set_on_fire_classic = def.groups["set_on_fire"]
 		if set_on_fire_classic ~= nil then
@@ -104,7 +103,6 @@ end)
 minetest.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		if molten_sailor_mcl.has_full_lava_suit(player) then
-			core.log("action","skipping player on fire " .. player:get_player_name())
 			return
 		end
 		local storage = mcl_burning.storage[player]
@@ -126,5 +124,3 @@ minetest.register_globalstep(function(dtime)
 		end
 	end
 end)
-
--- WORKHERE: lava suit still takes damage like it is on fire/the player is taking damage, when in lava. When I am merely near the lava, it makes the cooling noise but does not take damage, so it must be mcl and not this mod doing it.
