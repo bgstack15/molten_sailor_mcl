@@ -100,6 +100,7 @@ minetest.register_on_mods_loaded(function()
 end)
 
 -- copied directly from mineclonia/mods/ENTITIES/mcl_burning/init.lua and then modified for lava suit protection
+-- lava suit prevents setting the player on fire
 minetest.register_globalstep(function(dtime)
 	for player in mcl_util.connected_players() do
 		if molten_sailor_mcl.has_full_lava_suit(player) then

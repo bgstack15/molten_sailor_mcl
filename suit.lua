@@ -2,12 +2,13 @@
 --increase speed so can move nice in lava, but can't jump and useless as armor so not good as a speed suit.
 
 local S = core.get_translator(core.get_current_modname())
+local c = molten_sailor_mcl.coolant
 
 local durability_seconds = molten_sailor_mcl.durability_seconds
 -- set to a modest number so incidental damage does not destroy the outfit
 if durability_seconds == 0 then
-   molten_sailor_mcl.durability_on = false
-   durability_seconds = 60
+	molten_sailor_mcl.durability_on = false
+	durability_seconds = 60
 end
 
 mcl_armor.register_set({
@@ -27,7 +28,7 @@ mcl_armor.register_set({
 		feet  = 0,
 	},
 	craft_material = nil, -- use custom recipes below
-	repair_material = "group:ice",
+	repair_material = c,
 	groups = { fire_immune=1 },
 	on_equip_callbacks = {
 		head  = function (obj, itemstack) molten_sailor_mcl.don(obj, itemstack) end,

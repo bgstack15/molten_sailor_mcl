@@ -15,5 +15,5 @@ dofile(MP.."/hud.lua")
 dofile(MP.."/burning.lua")
 
 print("[OK] molten_sailor_mcl")
-core.log("action","[molten_sailor_mcl] using durability " .. molten_sailor_mcl.durability_seconds)
-core.log("action","[molten_sailor_mcl] durability_on = " .. tostring(molten_sailor_mcl.durability_on))
+core.log("verbose","[molten_sailor_mcl] using durability " .. molten_sailor_mcl.durability_seconds)
+core.log("verbose","[molten_sailor_mcl] durability_on = " .. tostring(molten_sailor_mcl.durability_on))
