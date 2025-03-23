@@ -6,6 +6,7 @@ molten_sailor_mcl = {
 }
 
 local MP = minetest.get_modpath("molten_sailor_mcl")
+dofile(MP.."/helpers.lua")
 dofile(MP.."/boat.lua")
 dofile(MP.."/suit.lua")
 dofile(MP.."/crafts.lua")
