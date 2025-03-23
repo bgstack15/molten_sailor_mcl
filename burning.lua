@@ -51,24 +51,23 @@ minetest.register_globalstep(function(dtime)
 			local pos = player:get_pos()
 			local on_fire = minetest.find_node_near(pos, 1, {"group:lava","group:fire"})
 
-			if on_fire and durability_seconds > 0 and (has_helmet or has_chestplate or has_pants or has_boots)  then
-
-				for i, stack in pairs(armor_inv) do
-					if not stack:is_empty() then
-						local name = stack:get_name()
-						-- use one durability per loop (which is one second)
-						use_durability(player, inv, i, stack, 1)
-						core.log("action","item " .. name .. " uses is now at " .. stack:get_wear()/65535*durability_seconds .. "/" .. durability_seconds)
-					end
-				end
+			if on_fire then
 				minetest.sound_play("fire_extinguish_flame", {pos = pos,max_hear_distance = 2,	gain = 0.1,})
-
-
-				if player:get_breath() < 3 then
-					player:set_breath(3)
-				end
-			end
-		end
+				if molten_sailor_mcl.durability_on and durability_seconds > 0 and (has_helmet or has_chestplate or has_pants or has_boots) then
+					for i, stack in pairs(armor_inv) do
+						if not stack:is_empty() then
+							local name = stack:get_name()
+							-- use one durability per loop (which is one second)
+							use_durability(player, inv, i, stack, 1)
+							core.log("action","item " .. name .. " uses is now at " .. stack:get_wear()/65535*durability_seconds .. "/" .. durability_seconds)
+						end
+					end
+					if player:get_breath() < 3 then
+						player:set_breath(3)
+					end
+				end -- if on_fire
+			end -- for each player
+		end -- if timer>1
 		timer = 0
 
 		local t1 = minetest.get_us_time()
@@ -89,43 +88,43 @@ end, 100)
 
 -- loop over all registered nodes to modify group:set_on_fire to set_on_fire_classic
 minetest.register_on_mods_loaded(function()
-   -- Store blast resistance values by content ids to improve performance.
-   for name, def in pairs(minetest.registered_nodes) do
-      local set_on_fire_classic = def.groups["set_on_fire"]
-      if set_on_fire_classic ~= nil then
-         local groups = table.copy(def.groups)
-         groups["set_on_fire_classic"] = set_on_fire_classic
-         molten_sailor_mcl.override_groups(name, groups)
-         core.log("verbose","[molten_sailor_mcl] adjusting for lava suit: " .. name)
-      end
-   end
+	-- Store blast resistance values by content ids to improve performance.
+	for name, def in pairs(minetest.registered_nodes) do
+		local set_on_fire_classic = def.groups["set_on_fire"]
+		if set_on_fire_classic ~= nil then
+			local groups = table.copy(def.groups)
+			groups["set_on_fire_classic"] = set_on_fire_classic
+			molten_sailor_mcl.override_groups(name, groups)
+			core.log("verbose","[molten_sailor_mcl] adjusting for lava suit: " .. name)
+		end
+	end
 end)
 
 -- copied directly from mineclonia/mods/ENTITIES/mcl_burning/init.lua and then modified for lava suit protection
 minetest.register_globalstep(function(dtime)
-   for player in mcl_util.connected_players() do
-      if molten_sailor_mcl.has_full_lava_suit(player) then
-         core.log("action","skipping player on fire " .. player:get_player_name())
-         return
-      end
-      local storage = mcl_burning.storage[player]
-      if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
-         local nodes = mcl_burning.get_touching_nodes(player, {"group:set_on_fire_classic"}, storage)
-         local burn_time = 0
+	for player in mcl_util.connected_players() do
+		if molten_sailor_mcl.has_full_lava_suit(player) then
+			core.log("action","skipping player on fire " .. player:get_player_name())
+			return
+		end
+		local storage = mcl_burning.storage[player]
+		if not mcl_burning.tick(player, dtime, storage) and not mcl_burning.is_affected_by_rain(player) then
+			local nodes = mcl_burning.get_touching_nodes(player, {"group:set_on_fire_classic"}, storage)
+			local burn_time = 0
 
-         for _, pos in pairs(nodes) do
-            local node = minetest.get_node(pos)
-            local value = minetest.get_item_group(node.name, "set_on_fire_classic")
-            if value > burn_time then
-               burn_time = value
-            end
-         end
+			for _, pos in pairs(nodes) do
+				local node = minetest.get_node(pos)
+				local value = minetest.get_item_group(node.name, "set_on_fire_classic")
+				if value > burn_time then
+					burn_time = value
+				end
+			end
 
-         if burn_time > 0 then
-            mcl_burning.set_on_fire(player, burn_time)
-         end
-      end
-   end
+			if burn_time > 0 then
+				mcl_burning.set_on_fire(player, burn_time)
+			end
+		end
+	end
 end)
 
--- WORKHERE: lava suit still takes damage like it is on fire/the player is taking damage, when in lava.
+-- WORKHERE: lava suit still takes damage like it is on fire/the player is taking damage, when in lava. When I am merely near the lava, it makes the cooling noise but does not take damage, so it must be mcl and not this mod doing it.

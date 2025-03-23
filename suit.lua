@@ -5,7 +5,10 @@ local S = core.get_translator(core.get_current_modname())
 
 local durability_seconds = molten_sailor_mcl.durability_seconds
 -- set to a modest number so incidental damage does not destroy the outfit
-if durability_seconds == 0 then durability_seconds = 60 end
+if durability_seconds == 0 then
+   molten_sailor_mcl.durability_on = false
+   durability_seconds = 60
+end
 
 mcl_armor.register_set({
 	name = "obsidian",

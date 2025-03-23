@@ -1,8 +1,9 @@
 molten_sailor_mcl = {
 	durability_seconds = tonumber(minetest.settings:get("molten_sailor_mcl.durability_seconds")) or 1200,
-   main = "mcl_core:obsidian",
-   coolant = "group:ice",
-   boat = "group:boat",
+	durability_on = true,
+	main = "mcl_core:obsidian",
+	coolant = "group:ice",
+	boat = "group:boat",
 }
 
 local MP = minetest.get_modpath("molten_sailor_mcl")
@@ -15,3 +16,4 @@ dofile(MP.."/burning.lua")
 
 print("[OK] molten_sailor_mcl")
 core.log("action","[molten_sailor_mcl] using durability " .. molten_sailor_mcl.durability_seconds)
+core.log("action","[molten_sailor_mcl] durability_on = " .. tostring(molten_sailor_mcl.durability_on))
